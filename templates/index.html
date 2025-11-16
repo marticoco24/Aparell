@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Missatges 💌</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 1.5rem;
+            background: #f7f7fb;
+        }
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.1rem;
+            margin-top: 1.25rem;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        button {
+            margin-top: 0.75rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button.enviar {
+            background: #111827;
+            color: white;
+        }
+        button.enviar:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+        .status {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .status.ok {
+            color: #16a34a;
+        }
+        .status.error {
+            color: #dc2626;
+        }
+        .ultimo {
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: #f1f5f9;
+            font-size: 0.95rem;
+        }
+        .ultimo small {
+            display: block;
+            opacity: 0.7;
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+        .pill {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 999px;
+            background: #e5e7eb;
+            font-size: 0.75rem;
+            margin-right: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Enviar missatge al vostre “aparell” 💌</h1>
+
+    <section aria-label="Últim missatge">
+        <h2>Últim missatge compartit</h2>
+        <div class="ultimo">
+            <small>
+                <span class="pill">id: <span id="ultimo-id">{{ mensaje.id }}</span></span>
+                <span class="pill">enviat per:
+                    <span id="ultimo-from">
+                        {{ mensaje.from or 'marti' }}
+                    </span>
+                </span>
+            </small>
+            <div id="ultimo-texto">{{ mensaje.text }}</div>
+            <small>
+                <span>hora (UTC):</span>
+                <span id="ultimo-ts">{{ mensaje.timestamp }}</span>
+            </small>
+        </div>
+    </section>
+
+    <section aria-label="Nou missatge">
+        <h2>Escriure un nou missatge</h2>
+        <form id="form-mensaje">
+            <label for="text" style="display:block;margin-top:0.25rem;margin-bottom:0.25rem;">
+                Text del missatge (es mostrarà igual als dos aparells):
+            </label>
+            <textarea id="text" name="text" placeholder="Escriu aquí el que vulguis enviar-li..."></textarea>
+            <button type="submit" class="enviar" id="btn-enviar">Enviar com a “marti”</button>
+        </form>
+
+        <div id="status" class="status"></div>
+    </section>
+</div>
+
+<script>
+    const form = document.getElementById('form-mensaje');
+    const statusDiv = document.getElementById('status');
+    const ultimoTexto = document.getElementById('ultimo-texto');
+    const ultimoId = document.getElementById('ultimo-id');
+    const ultimoFrom = document.getElementById('ultimo-from');
+    const ultimoTs = document.getElementById('ultimo-ts');
+    const btnEnviar = document.getElementById('btn-enviar');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = document.getElementById('text').value.trim();
+        if (!text) {
+            statusDiv.textContent = "El missatge està buit.";
+            statusDiv.className = "status error";
+            return;
+        }
+
+        btnEnviar.disabled = true;
+        statusDiv.textContent = "Enviant...";
+        statusDiv.className = "status";
+
+        try {
+            const res = await fetch('/mensaje', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: text,
+                    from: 'marti'  // de moment assumim que envies tu
+                })
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Error enviant missatge");
+            }
+
+            // Actualitzem la vista del "últim missatge"
+            ultimoTexto.textContent = data.mensaje.text;
+            ultimoId.textContent = data.mensaje.id;
+            ultimoFrom.textContent = data.mensaje.from || 'marti';
+            ultimoTs.textContent = data.mensaje.timestamp;
+
+            statusDiv.textContent = "Missatge enviat ✅";
+            statusDiv.className = "status ok";
+            document.getElementById('text').value = "";
+        } catch (err) {
+            statusDiv.textContent = "Hi ha hagut un error: " + err.message;
+            statusDiv.className = "status error";
+        } finally {
+            btnEnviar.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
