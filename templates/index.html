@@ -1,182 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ca">
-<head>
-    <meta charset="UTF-8">
-    <title>Missatges 💌</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <title>Enviar missatge al vostre aparell 💌</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            margin: 0;
-            padding: 1.5rem;
-            background: #f7f7fb;
-        }
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        }
-        h1 {
-            font-size: 1.4rem;
-            margin-top: 0;
-        }
-        h2 {
-            font-size: 1.1rem;
-            margin-top: 1.25rem;
-        }
-        textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-            resize: vertical;
-        }
-        button {
-            margin-top: 0.75rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 999px;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        button.enviar {
-            background: #111827;
-            color: white;
-        }
-        button.enviar:disabled {
-            opacity: 0.5;
-            cursor: default;
-        }
-        .status {
-            margin-top: 0.75rem;
-            font-size: 0.9rem;
-        }
-        .status.ok {
-            color: #16a34a;
-        }
-        .status.error {
-            color: #dc2626;
-        }
-        .ultimo {
-            margin-top: 0.5rem;
-            padding: 0.75rem;
-            border-radius: 10px;
-            background: #f1f5f9;
-            font-size: 0.95rem;
-        }
-        .ultimo small {
-            display: block;
-            opacity: 0.7;
-            margin-bottom: 0.25rem;
-            font-size: 0.8rem;
-        }
-        .pill {
-            display: inline-block;
-            padding: 0.1rem 0.6rem;
-            border-radius: 999px;
-            background: #e5e7eb;
-            font-size: 0.75rem;
-            margin-right: 0.25rem;
-        }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        background: #faf5ff;
+      }
+      h1 {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+      }
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        margin-top: 1rem;
+      }
+      label {
+        font-weight: 500;
+      }
+      textarea {
+        width: 100%;
+        min-height: 120px;
+        margin-top: 0.5rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: 1px solid #d4d4d8;
+        resize: vertical;
+        font-family: inherit;
+      }
+      button {
+        margin-top: 0.75rem;
+        padding: 0.6rem 1.4rem;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        background: #7c3aed;
+        color: white;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+      .status {
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+      }
+      .radio-group {
+        display: flex;
+        gap: 1rem;
+        margin: 0.5rem 0 0.75rem 0;
+        align-items: center;
+        flex-wrap: wrap;
+      }
     </style>
-</head>
-<body>
-<div class="container">
-    <h1>Enviar missatge al vostre “aparell” 💌</h1>
+  </head>
+  <body>
+    <h1>Enviar missatge al vostre aparell 💌</h1>
+    <p style="margin-top: 0; color: #4b5563; font-size: 0.95rem;">
+      Tria qui ets, escriu el missatge i es guardarà al núvol perquè
+      l'<strong>aparell de l'altra persona</strong> el mostri a la pantalla.
+      El contingut <strong>no es mostra a la web</strong>, només al dispositiu.
+    </p>
 
-    <section aria-label="Últim missatge">
-        <h2>Últim missatge compartit</h2>
-        <div class="ultimo">
-            <small>
-                <span class="pill">id: <span id="ultimo-id">{{ mensaje.id }}</span></span>
-                <span class="pill">enviat per:
-                    <span id="ultimo-from">
-                        {{ mensaje.from or 'marti' }}
-                    </span>
-                </span>
-            </small>
-            <div id="ultimo-texto">{{ mensaje.text }}</div>
-            <small>
-                <span>hora (UTC):</span>
-                <span id="ultimo-ts">{{ mensaje.timestamp }}</span>
-            </small>
+    <div class="card">
+      <form id="msg-form">
+        <label>Sóc…</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="from" value="marti" checked />
+            Martí
+          </label>
+          <label>
+            <input type="radio" name="from" value="ella" />
+            Ella
+          </label>
         </div>
-    </section>
 
-    <section aria-label="Nou missatge">
-        <h2>Escriure un nou missatge</h2>
-        <form id="form-mensaje">
-            <label for="text" style="display:block;margin-top:0.25rem;margin-bottom:0.25rem;">
-                Text del missatge (es mostrarà igual als dos aparells):
-            </label>
-            <textarea id="text" name="text" placeholder="Escriu aquí el que vulguis enviar-li..."></textarea>
-            <button type="submit" class="enviar" id="btn-enviar">Enviar com a “marti”</button>
-        </form>
+        <label for="text" style="display:block; margin-top:0.75rem;">
+          Missatge per a l'altre 💌
+        </label>
+        <textarea
+          id="text"
+          name="text"
+          placeholder="Escriu aquí el missatge que sortirà a la pantalla de l'altre aparell…"
+        ></textarea>
+
+        <button type="submit" id="send-btn">Enviar</button>
 
         <div id="status" class="status"></div>
-    </section>
-</div>
+      </form>
+    </div>
 
-<script>
-    const form = document.getElementById('form-mensaje');
-    const statusDiv = document.getElementById('status');
-    const ultimoTexto = document.getElementById('ultimo-texto');
-    const ultimoId = document.getElementById('ultimo-id');
-    const ultimoFrom = document.getElementById('ultimo-from');
-    const ultimoTs = document.getElementById('ultimo-ts');
-    const btnEnviar = document.getElementById('btn-enviar');
+    <script>
+      const form = document.getElementById("msg-form");
+      const statusEl = document.getElementById("status");
+      const sendBtn = document.getElementById("send-btn");
+      const textarea = document.getElementById("text");
 
-    form.addEventListener('submit', async (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const text = document.getElementById('text').value.trim();
+        statusEl.textContent = "";
+        const text = textarea.value.trim();
         if (!text) {
-            statusDiv.textContent = "El missatge està buit.";
-            statusDiv.className = "status error";
-            return;
+          statusEl.textContent = "El missatge està buit 😅";
+          statusEl.style.color = "#b91c1c";
+          return;
         }
 
-        btnEnviar.disabled = true;
-        statusDiv.textContent = "Enviant...";
-        statusDiv.className = "status";
+        const from = form.elements["from"].value;
+
+        sendBtn.disabled = true;
+        sendBtn.textContent = "Enviant…";
 
         try {
-            const res = await fetch('/mensaje', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    text: text,
-                    from: 'marti'  // de moment assumim que envies tu
-                })
-            });
+          const resp = await fetch("/mensaje", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text, from }),
+          });
 
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.error || "Error enviant missatge");
-            }
+          const data = await resp.json();
 
-            // Actualitzem la vista del "últim missatge"
-            ultimoTexto.textContent = data.mensaje.text;
-            ultimoId.textContent = data.mensaje.id;
-            ultimoFrom.textContent = data.mensaje.from || 'marti';
-            ultimoTs.textContent = data.mensaje.timestamp;
+          if (!resp.ok || data.status !== "ok") {
+            throw new Error(data.error || "Error en enviar el missatge");
+          }
 
-            statusDiv.textContent = "Missatge enviat ✅";
-            statusDiv.className = "status ok";
-            document.getElementById('text').value = "";
+          // No mostrem mai el text aquí, només confirmació
+          textarea.value = "";
+          statusEl.textContent =
+            "Missatge enviat ✅. Es veurà a l'aparell de l'altra persona.";
+          statusEl.style.color = "#166534";
         } catch (err) {
-            statusDiv.textContent = "Hi ha hagut un error: " + err.message;
-            statusDiv.className = "status error";
+          console.error(err);
+          statusEl.textContent =
+            "Hi ha hagut un error en enviar el missatge 😔 Torna-ho a provar.";
+          statusEl.style.color = "#b91c1c";
         } finally {
-            btnEnviar.disabled = false;
+          sendBtn.disabled = false;
+          sendBtn.textContent = "Enviar";
         }
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>
