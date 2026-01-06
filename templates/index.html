@@ -5,122 +5,338 @@
     <title>Enviar missatge al vostre aparell 💌</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
+      :root {
+        --bg: #faf5ff;
+        --card: #ffffff;
+        --primary: #7c3aed;
+        --primary-soft: #ede9fe;
+        --text-main: #111827;
+        --text-muted: #6b7280;
+        --danger: #b91c1c;
+        --success: #166534;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           sans-serif;
-        max-width: 600px;
+        max-width: 640px;
         margin: 0 auto;
-        padding: 1.5rem;
-        background: #faf5ff;
+        padding: 1.75rem 1.25rem 2.5rem;
+        background: radial-gradient(circle at top, #e9d5ff 0, #faf5ff 40%, #fdfdfd 100%);
+        color: var(--text-main);
       }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .chip-heart {
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-soft);
+        font-size: 1.5rem;
+      }
+
       h1 {
-        font-size: 1.6rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.55rem;
+        margin: 0;
       }
+
+      .subtitle {
+        margin-top: 0.1rem;
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+
       .card {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        background: var(--card);
+        border-radius: 16px;
+        padding: 1.1rem 1.3rem 1.3rem;
+        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
         margin-top: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.18);
       }
+
+      .card-title {
+        font-size: 0.98rem;
+        font-weight: 600;
+        margin: 0 0 0.3rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.18rem 0.55rem;
+        border-radius: 999px;
+        background: #f5f3ff;
+        color: #4c1d95;
+        border: 1px solid #ddd6fe;
+      }
+
+      .hint {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+
       label {
         font-weight: 500;
       }
-      textarea {
-        width: 100%;
-        min-height: 120px;
-        margin-top: 0.5rem;
-        padding: 0.75rem;
-        border-radius: 8px;
-        border: 1px solid #d4d4d8;
-        resize: vertical;
-        font-family: inherit;
-      }
-      button {
-        margin-top: 0.75rem;
-        padding: 0.6rem 1.4rem;
-        border-radius: 999px;
-        border: none;
-        cursor: pointer;
-        font-weight: 600;
-        background: #7c3aed;
-        color: white;
-      }
-      button:disabled {
-        opacity: 0.6;
-        cursor: default;
-      }
-      .status {
-        margin-top: 0.75rem;
+
+      .section-label {
+        margin-top: 0.9rem;
+        margin-bottom: 0.2rem;
         font-size: 0.9rem;
       }
+
       .radio-group {
         display: flex;
-        gap: 1rem;
+        gap: 0.75rem;
         margin: 0.5rem 0 0.75rem 0;
         align-items: center;
         flex-wrap: wrap;
       }
+
+      .pill {
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        border: 1px solid #e5e7eb;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        background: #f9fafb;
+        transition: background 0.15s ease, border-color 0.15s ease,
+          transform 0.08s ease;
+      }
+
+      .pill input {
+        display: none;
+      }
+
+      .pill span.dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid #d1d5db;
+        background: #ffffff;
+      }
+
+      .pill span.name {
+        font-weight: 600;
+      }
+
+      .pill span.note {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .pill.active {
+        border-color: var(--primary);
+        background: var(--primary-soft);
+        transform: translateY(-1px);
+      }
+
+      .pill.active span.dot {
+        border-color: transparent;
+        background: var(--primary);
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 130px;
+        margin-top: 0.4rem;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1px solid #d4d4d8;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        background: #f9fafb;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.35);
+        background: #ffffff;
+      }
+
+      button {
+        margin-top: 0.9rem;
+        padding: 0.65rem 1.5rem;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        background: var(--primary);
+        color: white;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        box-shadow: 0 10px 20px rgba(124, 58, 237, 0.35);
+      }
+
+      button span.icon {
+        font-size: 1.05rem;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+        box-shadow: none;
+      }
+
+      .status {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      .status.ok {
+        color: var(--success);
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .footer-note {
+        margin-top: 1.6rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-align: center;
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding-inline: 1rem;
+        }
+        .card {
+          padding-inline: 1.05rem;
+        }
+      }
     </style>
   </head>
   <body>
-    <h1>Enviar missatge al vostre aparell 💌</h1>
-    <p style="margin-top: 0; color: #4b5563; font-size: 0.95rem;">
-      Tria qui ets, escriu el missatge i es guardarà al núvol perquè
-      l'<strong>aparell de l'altra persona</strong> el mostri a la pantalla.
-      El contingut <strong>no es mostra a la web</strong>, només al dispositiu.
-    </p>
+    <header>
+      <div class="chip-heart">💌</div>
+      <div>
+        <h1>Enviar missatge al vostre aparell</h1>
+        <p class="subtitle">
+          Tria qui ets, escriu el missatge i viatjarà al núvol perquè surti a la
+          pantalla de l'altre. El contingut
+          <strong>no es mostra mai aquí</strong>, només als dispositius.
+        </p>
+      </div>
+    </header>
 
     <div class="card">
-      <form id="msg-form">
-        <label>Sóc…</label>
-        <div class="radio-group">
-          <label>
+      <div class="card-title">
+        Enviar un nou missatge
+        <span class="badge">núvol · aparells</span>
+      </div>
+      <p class="hint">
+        Quan l'aparell s'encengui i es connecti al mòbil, llegirà l'últim
+        missatge que hi hagi al núvol i el mostrarà a la pantalla.
+      </p>
+
+      <form id="msg-form" style="margin-top: 0.9rem;">
+        <div class="section-label">
+          <label>Sóc…</label>
+        </div>
+        <div class="radio-group" id="from-group">
+          <label class="pill active">
             <input type="radio" name="from" value="marti" checked />
-            Martí
+            <span class="dot"></span>
+            <span class="name">Martí</span>
+            <span class="note">enviarà al seu aparell, el de la Mariona</span>
           </label>
-          <label>
+          <label class="pill">
             <input type="radio" name="from" value="ella" />
-            Ella
+            <span class="dot"></span>
+            <span class="name">Mariona</span>
+            <span class="note">enviarà al teu aparell, el de Martí</span>
           </label>
         </div>
 
-        <label for="text" style="display:block; margin-top:0.75rem;">
-          Missatge per a l'altre 💌
-        </label>
+        <div class="section-label">
+          <label for="text">Missatge per a l'altre 💌</label>
+        </div>
         <textarea
           id="text"
           name="text"
           placeholder="Escriu aquí el missatge que sortirà a la pantalla de l'altre aparell…"
         ></textarea>
 
-        <button type="submit" id="send-btn">Enviar</button>
+        <button type="submit" id="send-btn">
+          <span class="icon">📡</span>
+          <span>Enviar al seu aparell</span>
+        </button>
 
         <div id="status" class="status"></div>
       </form>
     </div>
+
+    <p class="footer-note">
+      El text del missatge només existeix al servidor i als aparells. La web
+      només envia, no guarda ni ensenya res del contingut. 🌙
+    </p>
 
     <script>
       const form = document.getElementById("msg-form");
       const statusEl = document.getElementById("status");
       const sendBtn = document.getElementById("send-btn");
       const textarea = document.getElementById("text");
+      const fromGroup = document.getElementById("from-group");
+
+      // canvi visual dels "pills" Martí / Mariona
+      fromGroup.addEventListener("click", (e) => {
+        const label = e.target.closest("label.pill");
+        if (!label) return;
+        const input = label.querySelector("input[type=radio]");
+        if (!input) return;
+
+        input.checked = true;
+        document
+          .querySelectorAll("#from-group label.pill")
+          .forEach((l) => l.classList.remove("active"));
+        label.classList.add("active");
+      });
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         statusEl.textContent = "";
+        statusEl.className = "status";
+
         const text = textarea.value.trim();
         if (!text) {
           statusEl.textContent = "El missatge està buit 😅";
-          statusEl.style.color = "#b91c1c";
+          statusEl.classList.add("error");
           return;
         }
 
         const from = form.elements["from"].value;
 
         sendBtn.disabled = true;
-        sendBtn.textContent = "Enviant…";
+        sendBtn.querySelector("span:nth-child(2)").textContent = "Enviant…";
 
         try {
           const resp = await fetch("/mensaje", {
@@ -140,16 +356,17 @@
           // No mostrem mai el text aquí, només confirmació
           textarea.value = "";
           statusEl.textContent =
-            "Missatge enviat ✅. Es veurà a l'aparell de l'altra persona.";
-          statusEl.style.color = "#166534";
+            "Missatge enviat ✅. Es veurà a l'aparell de l'altra persona quan el connecti.";
+          statusEl.classList.add("ok");
         } catch (err) {
           console.error(err);
           statusEl.textContent =
             "Hi ha hagut un error en enviar el missatge 😔 Torna-ho a provar.";
-          statusEl.style.color = "#b91c1c";
+          statusEl.classList.add("error");
         } finally {
           sendBtn.disabled = false;
-          sendBtn.textContent = "Enviar";
+          sendBtn.querySelector("span:nth-child(2)").textContent =
+            "Enviar al seu aparell";
         }
       });
     </script>
