@@ -4,16 +4,36 @@
     <meta charset="utf-8" />
     <title>Envia'm un missatge ❤️</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Font suau (opcional) -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
       :root {
-        --bg: #faf5ff;
+        --bg: #f9fafb;
+        --bg-soft-top: #e0f2fe;      /* blau cel pastel */
         --card: #ffffff;
-        --primary: #7c3aed;
-        --primary-soft: #ede9fe;
+        --primary: #0ea5e9;          /* blau turquesa */
+        --primary-soft: #e0f2fe;     /* blau molt suau */
+        --accent: #f9a8d4;           /* rosa pastel suau */
+        --accent-soft: #fdf2f8;
         --text-main: #111827;
         --text-muted: #6b7280;
         --danger: #b91c1c;
         --success: #166534;
+        --border-subtle: #e5e7eb;
       }
 
       * {
@@ -21,12 +41,17 @@
       }
 
       body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
+        font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
         max-width: 640px;
         margin: 0 auto;
         padding: 1.75rem 1.25rem 2.5rem;
-        background: radial-gradient(circle at top, #e9d5ff 0, #faf5ff 40%, #fdfdfd 100%);
+        background: radial-gradient(
+          circle at top,
+          var(--bg-soft-top) 0,
+          var(--bg) 45%,
+          #ffffff 100%
+        );
         color: var(--text-main);
       }
 
@@ -38,38 +63,41 @@
       }
 
       .chip-heart {
-        width: 42px;
-        height: 42px;
+        width: 40px;
+        height: 40px;
         border-radius: 999px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--primary-soft);
-        font-size: 1.5rem;
+        background: radial-gradient(circle at 30% 30%, var(--accent), #fb7185);
+        color: white;
+        font-size: 1.3rem;
+        box-shadow: 0 8px 18px rgba(248, 113, 113, 0.35);
       }
 
       h1 {
-        font-size: 1.55rem;
+        font-size: 1.6rem;
         margin: 0;
+        letter-spacing: 0.01em;
       }
 
       .subtitle {
-        margin-top: 0.1rem;
+        margin-top: 0.2rem;
         color: var(--text-muted);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
       }
 
       .card {
         background: var(--card);
         border-radius: 16px;
-        padding: 1.1rem 1.3rem 1.3rem;
-        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
+        padding: 1.1rem 1.3rem 1.35rem;
+        box-shadow: 0 12px 24px rgba(148, 163, 184, 0.25);
         margin-top: 1rem;
-        border: 1px solid rgba(148, 163, 184, 0.18);
+        border: 1px solid var(--border-subtle);
       }
 
       .card-title {
-        font-size: 0.98rem;
+        font-size: 0.96rem;
         font-weight: 600;
         margin: 0 0 0.3rem 0;
         display: flex;
@@ -80,34 +108,34 @@
       .badge {
         font-size: 0.7rem;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.12em;
         padding: 0.18rem 0.55rem;
         border-radius: 999px;
-        background: #f5f3ff;
-        color: #4c1d95;
-        border: 1px solid #ddd6fe;
+        background: var(--primary-soft);
+        color: #0369a1; /* blau més fosc */
+        border: 1px solid #bae6fd;
       }
 
       .hint {
         margin: 0;
         color: var(--text-muted);
-        font-size: 0.85rem;
+        font-size: 0.83rem;
       }
 
       label {
-        font-weight: 500;
+        font-weight: 600;
       }
 
       .section-label {
         margin-top: 0.9rem;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.25rem;
         font-size: 0.9rem;
       }
 
       .radio-group {
         display: flex;
-        gap: 0.75rem;
-        margin: 0.5rem 0 0.75rem 0;
+        gap: 0.6rem;
+        margin: 0.5rem 0 0.8rem 0;
         align-items: center;
         flex-wrap: wrap;
       }
@@ -123,7 +151,7 @@
         font-size: 0.9rem;
         background: #f9fafb;
         transition: background 0.15s ease, border-color 0.15s ease,
-          transform 0.08s ease;
+          transform 0.08s ease, box-shadow 0.12s ease;
       }
 
       .pill input {
@@ -131,8 +159,8 @@
       }
 
       .pill span.dot {
-        width: 12px;
-        height: 12px;
+        width: 11px;
+        height: 11px;
         border-radius: 50%;
         border: 2px solid #d1d5db;
         background: #ffffff;
@@ -151,6 +179,7 @@
         border-color: var(--primary);
         background: var(--primary-soft);
         transform: translateY(-1px);
+        box-shadow: 0 8px 16px rgba(59, 130, 246, 0.35);
       }
 
       .pill.active span.dot {
@@ -162,41 +191,61 @@
         width: 100%;
         min-height: 130px;
         margin-top: 0.4rem;
-        padding: 0.8rem;
-        border-radius: 10px;
+        padding: 0.85rem;
+        border-radius: 12px;
         border: 1px solid #d4d4d8;
         resize: vertical;
         font-family: inherit;
-        font-size: 0.95rem;
-        line-height: 1.4;
+        font-size: 0.96rem;
+        line-height: 1.45;
         background: #f9fafb;
+        color: var(--text-main);
+      }
+
+      textarea::placeholder {
+        color: #9ca3af;
       }
 
       textarea:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.35);
+        box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.4);
         background: #ffffff;
       }
 
       button {
-        margin-top: 0.9rem;
-        padding: 0.65rem 1.5rem;
+        margin-top: 1rem;
+        padding: 0.7rem 1.6rem;
         border-radius: 999px;
         border: none;
         cursor: pointer;
         font-weight: 600;
-        background: var(--primary);
-        color: white;
+        background: var(--primary);       /* un sol color turquesa */
+        color: #ffffff;                   /* text blanc */
         font-size: 0.95rem;
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        box-shadow: 0 10px 20px rgba(124, 58, 237, 0.35);
-      }
+        justify-content: center;
+        gap: 0.45rem;
+        box-shadow: 0 10px 20px rgba(14, 165, 233, 0.35);
+        transform: translateY(0);
+        transition: transform 0.08s ease, box-shadow 0.12s ease,
+            filter 0.12s ease;
+        }
 
       button span.icon {
         font-size: 1.05rem;
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 30px rgba(56, 189, 248, 0.4);
+        filter: brightness(1.03);
+      }
+
+      button:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 10px 20px rgba(56, 189, 248, 0.35);
       }
 
       button:disabled {
@@ -206,8 +255,9 @@
       }
 
       .status {
-        margin-top: 0.75rem;
+        margin-top: 0.8rem;
         font-size: 0.85rem;
+        min-height: 1.1em;
       }
 
       .status.ok {
@@ -220,9 +270,13 @@
 
       .footer-note {
         margin-top: 1.6rem;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         color: var(--text-muted);
         text-align: center;
+      }
+
+      .footer-note span {
+        opacity: 0.85;
       }
 
       @media (max-width: 480px) {
@@ -231,6 +285,9 @@
         }
         .card {
           padding-inline: 1.05rem;
+        }
+        h1 {
+          font-size: 1.5rem;
         }
       }
     </style>
@@ -250,8 +307,7 @@
 
     <div class="card">
       <div class="card-title">
-        Enviar un nou missatge
-        <span class="badge">núvol · aparells</span>
+        <span class="badge">Enviar un nou missatge</span>
       </div>
       <p class="hint">
         Quan l'aparell s'encengui i es connecti al mòbil, llegirà l'últim
@@ -287,8 +343,7 @@
         ></textarea>
 
         <button type="submit" id="send-btn">
-          <span class="icon">😁</span>
-          <span>Enviar al seu aparell</span>
+            <span id="send-btn-text">Enviar al seu aparell 😁</span>
         </button>
 
         <div id="status" class="status"></div>
@@ -296,8 +351,10 @@
     </div>
 
     <p class="footer-note">
-      El text del missatge només existeix al servidor i als aparells. La web
-      només envia, no guarda ni ensenya res del contingut. 🌙
+      <span>
+        El text del missatge només existeix al servidor i als aparells. La web
+        només envia, no guarda ni ensenya res del contingut. 🌙
+      </span>
     </p>
 
     <script>
@@ -306,6 +363,8 @@
       const sendBtn = document.getElementById("send-btn");
       const textarea = document.getElementById("text");
       const fromGroup = document.getElementById("from-group");
+      const sendBtnText = document.getElementById("send-btn-text");
+
 
       // canvi visual dels "pills" Martí / Mariona
       fromGroup.addEventListener("click", (e) => {
@@ -336,7 +395,7 @@
         const from = form.elements["from"].value;
 
         sendBtn.disabled = true;
-        sendBtn.querySelector("span:nth-child(2)").textContent = "Enviant…";
+        sendBtnText.textContent = "Enviant…";
 
         try {
           const resp = await fetch("/mensaje", {
@@ -365,8 +424,7 @@
           statusEl.classList.add("error");
         } finally {
           sendBtn.disabled = false;
-          sendBtn.querySelector("span:nth-child(2)").textContent =
-            "Enviar al seu aparell";
+          sendBtnText.textContent = "Enviar al seu aparell 😁";
         }
       });
     </script>
